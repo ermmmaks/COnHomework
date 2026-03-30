@@ -1,4 +1,5 @@
 #include "CSVPretPrin.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -10,7 +11,6 @@ static int isNum(const char* s)
     }
     char* endPtr;
     strtod(s, &endPtr);
-    
     while (isspace((unsigned char)*endPtr)) {
         endPtr++;
     }
@@ -80,9 +80,7 @@ void algCSV(const char* inPath, const char* outPath)
             col = currCol;
         }
         row++;
-
     }
-    
     if (row > 0) {
         printSep(out, colWidths, col, '=');
         fprintf(out, "|");

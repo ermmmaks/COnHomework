@@ -8,6 +8,6 @@
 #define MAX_CELL_LEN 256
 #define MAX_COLS 50
 
-void algCSV(const char* inPath, const char * outPath);
+void algCSV(const char* inPath, const char* outPath);
 
 #endif
