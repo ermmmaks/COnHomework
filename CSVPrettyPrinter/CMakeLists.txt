@@ -1,1 +1,1 @@
-add_executable(main main.c CSVPretPrin.c)
+add_executable(main CSVmain.c CSVPretPrin.c)
