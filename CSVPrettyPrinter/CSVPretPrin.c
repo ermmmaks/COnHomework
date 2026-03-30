@@ -33,7 +33,7 @@ static void printSep(FILE* out, const int* widths, int cols, char symbol)
     fprintf(out, "\n");
 }
 
-void freeTable(char*** table, int* colWidths, int row, int col, FILE* in, FILE* out)
+static void freeTable(char*** table, int* colWidths, int row, int col, FILE* in, FILE* out)
 {
     if (table) {
         for (int i = 0; i < row; i++) {
