@@ -21,4 +21,4 @@ jobs:
           cmake --build build
       - name: Lint
         run: |
-          run-clang-tidy-18 -p=build
+          run-clang-tidy-18 -p build
