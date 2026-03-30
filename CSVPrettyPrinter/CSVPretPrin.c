@@ -77,6 +77,7 @@ void algCSV(const char* inPath, const char* outPath)
         if (!tmpTable) {
             freeTable(table, colWidths, row, col, in, out);
             printf("Realloc error!\n");
+            return;
         }
         table = tmpTable;
         table[row] = NULL;
@@ -89,8 +90,14 @@ void algCSV(const char* inPath, const char* outPath)
             table[row] = realloc(table[row], (currCol + 1) * sizeof(char*));
             table[row][currCol] = strdup(token);
 
+            int* tmpColWidths = realloc(colWidths, (currCol + 1) * sizeof(int));
+            if (!tmpColWidths) {
+                printf("Realloc error!\n");
+                freeTable(table, colWidths, row, col, in, out);
+                return;
+            }
             if (currCol >= col) {
-                colWidths = realloc(colWidths, (currCol + 1) * sizeof(int));
+                colWidths = tmpColWidths;
                 colWidths[currCol] = 0;
                 if (row == 0) {
                     col = currCol + 1;
