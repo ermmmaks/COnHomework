@@ -1,8 +1,8 @@
 #include "CSVPretPrin.h"
 
+#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 
 static int isNum(const char* s)
 {
