@@ -97,7 +97,7 @@ void algCSV(const char* inPath, const char* outPath)
                 if (!tmpColWidths) {
                     printf("Realloc error!\n");
                     freeTable(table, colWidths, row, col, in, out);
-                    return;  
+                    return;
                 }
                 colWidths = tmpColWidths;
                 colWidths[currCol] = 0;
