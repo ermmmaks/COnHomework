@@ -18,7 +18,7 @@ static int isNum(const char* s)
     return *endPtr == '\0';
 }
 
-static void printSep(FILE* out, int* widths, int cols, char symbol)
+static void printSep(FILE* out, const int* widths, int cols, char symbol)
 {
     fprintf(out, "+");
     for (int i = 0; i < cols; i++) {
@@ -28,6 +28,28 @@ static void printSep(FILE* out, int* widths, int cols, char symbol)
         fprintf(out, "+");
     }
     fprintf(out, "\n");
+}
+
+void freeTable(char*** table, int* colWidths, int row, int col, FILE* in, FILE* out)
+{
+    if (table) {
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                free(table[i][j]);
+            }
+            free(table[i]);
+        }
+        free(table);
+    }
+    if (colWidths) {
+        free(colWidths);
+    }
+    if (in) {
+        fclose(in);
+    }
+    if (out) {
+        fclose(out);
+    }
 }
 
 void algCSV(const char* inPath, const char* outPath)
@@ -51,7 +73,12 @@ void algCSV(const char* inPath, const char* outPath)
             continue;
         }
 
-        table = realloc(table, (row + 1) * sizeof(char**));
+        char*** tmpTable = realloc(table, (row + 1) * sizeof(char**));
+        if (!tmpTable) {
+            freeTable(table, colWidths, row, col, in, out);
+            printf("Realloc error!\n");
+        }
+        table = tmpTable;
         table[row] = NULL;
 
         int currCol = 0;
@@ -108,14 +135,5 @@ void algCSV(const char* inPath, const char* outPath)
         printf("Data error");
     }
 
-    for (int i = 0; i < row; i++) {
-        for (int j = 0; j < col; j++) {
-            free(table[i][j]);
-        }
-        free(table[i]);
-    }
-    free(table);
-    free(colWidths);
-    fclose(in);
-    fclose(out);
+    freeTable(table, colWidths, row, col, in, out);
 }
