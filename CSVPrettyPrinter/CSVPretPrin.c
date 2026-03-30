@@ -20,6 +20,9 @@ static int isNum(const char* s)
 
 static void printSep(FILE* out, const int* widths, int cols, char symbol)
 {
+    if (!widths) {
+        return;
+    }
     fprintf(out, "+");
     for (int i = 0; i < cols; i++) {
         for (int j = 0; j < widths[i] + 2; j++) {
@@ -34,10 +37,12 @@ void freeTable(char*** table, int* colWidths, int row, int col, FILE* in, FILE* 
 {
     if (table) {
         for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                free(table[i][j]);
+            if (table[i]) {
+                for (int j = 0; j < col; j++) {
+                    free(table[i][j]);
+                }
+                free(table[i]);
             }
-            free(table[i]);
         }
         free(table);
     }
@@ -87,22 +92,26 @@ void algCSV(const char* inPath, const char* outPath)
         char* token;
 
         while ((token = strsep(&linePtr, ",")) != NULL) {
-            table[row] = realloc(table[row], (currCol + 1) * sizeof(char*));
-            table[row][currCol] = strdup(token);
-
-            int* tmpColWidths = realloc(colWidths, (currCol + 1) * sizeof(int));
-            if (!tmpColWidths) {
-                printf("Realloc error!\n");
-                freeTable(table, colWidths, row, col, in, out);
-                return;
-            }
             if (currCol >= col) {
+                int* tmpColWidths = realloc(colWidths, (currCol + 1) * sizeof(int));
+                if (!tmpColWidths) {
+                    printf("Realloc error!\n");
+                    freeTable(table, colWidths, row, col, in, out);
+                    return;  
+                }
                 colWidths = tmpColWidths;
                 colWidths[currCol] = 0;
-                if (row == 0) {
-                    col = currCol + 1;
-                }
+                col = currCol + 1;
             }
+
+            char** tmpRow = realloc(table[row], (currCol + 1) * sizeof(char*));
+            if (!tmpRow) {
+                printf("Realloc error!\n");
+                freeTable(table, colWidths, row + 1, col, in, out);
+                return;
+            }
+            table[row] = tmpRow;
+            table[row][currCol] = strdup(token);
 
             int len = (int)strlen(token);
             if (len > colWidths[currCol]) {
@@ -110,8 +119,16 @@ void algCSV(const char* inPath, const char* outPath)
             }
             currCol++;
         }
-        if (row == 0) {
-            col = currCol;
+
+        // нужно заполнить недостающие колонки нулями, если их меньше максимума
+        if (currCol < col) {
+            char** tmpRow = realloc(table[row], col * sizeof(char*));
+            if (tmpRow) {
+                table[row] = tmpRow;
+                for (int j = currCol; j < col; j++) {
+                    table[row][j] = NULL;
+                }
+            }
         }
         row++;
     }
@@ -127,11 +144,11 @@ void algCSV(const char* inPath, const char* outPath)
         for (int i = 1; i < row; i++) {
             fprintf(out, "|");
             for (int j = 0; j < col; j++) {
-                char* val = table[i][j];
-                if (isNum(val)) {
+                char* val = (j < col) ? table[i][j] : "";
+                if (val && isNum(val)) {
                     fprintf(out, " %*s |", colWidths[j], val);
                 } else {
-                    fprintf(out, " %-*s |", colWidths[j], val);
+                    fprintf(out, " %-*s |", colWidths[j], val ? val : "");
                 }
             }
             fprintf(out, "\n");
