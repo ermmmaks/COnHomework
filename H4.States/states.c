@@ -72,6 +72,28 @@ void graphFree(Graph* g)
     free(g);
 }
 
+void globalFree(Graph* g, State* s, int k, int* sityesOwners)
+{
+    if (s) {
+        for (int i = 0; i < k; i++) {
+            if (s[i].sityes) {
+                free(s[i].sityes);
+            }
+        }
+        free(s);
+    } else {
+        printf("States isn't found!\n");
+    }
+
+    if (sityesOwners) {
+        free(sityesOwners);
+    } else {
+        printf("Sityes owners isn't found!\n");
+    }
+
+    graphFree(g);
+}
+
 int findNearest(Graph* g, State* s, const int* sityesOwners)
 {
     int bestCity = -1;

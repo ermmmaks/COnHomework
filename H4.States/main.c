@@ -8,32 +8,11 @@ struct State {
     int count;
 };
 
-void globalFree(Graph* g, State* s, int k, int* sityesOwners)
-{
-    if (s) {
-        for (int i = 0; i < k; i++) {
-            if (s[i].sityes) {
-                free(s[i].sityes);
-            }
-        }
-        free(s);
-    } else {
-        printf("States isn't found!\n");
-    }
-
-    if (sityesOwners) {
-        free(sityesOwners);
-    } else {
-        printf("Sityes owners isn't found!\n");
-    }
-
-    graphFree(g);
-}
-
 int main(void)
 {
     int n;
     int m;
+    printf("Write the count of sityes and ways: ");
     if (scanf("%d %d", &n, &m) != 2) {
         return 0;
     }
@@ -44,6 +23,7 @@ int main(void)
         return 1;
     }
 
+    printf("Write the data in this order: sity1, sity2, lenWay\n");
     for (int i = 0; i < m; i++) {
         int u;
         int v;
@@ -72,6 +52,7 @@ int main(void)
 
     for (int i = 0; i < k; i++) {
         int capital;
+        printf("Select the capitals: ");
         if (scanf("%d", &capital) != 1) {
             break;
         }
