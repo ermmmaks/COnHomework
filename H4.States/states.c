@@ -1,14 +1,14 @@
 #include "states.h"
-#include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 
-struct Edge{
+struct Edge {
     int way;
     int len;
 };
 
-struct Graph{
+struct Graph {
     int n;
     int m;
     int* head;
@@ -16,7 +16,7 @@ struct Graph{
     Edge* edges;
 };
 
-struct State{
+struct State {
     int id;
     int* sityes;
     int count;

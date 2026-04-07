@@ -1,11 +1,11 @@
 #include "states.h"
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 struct State {
     int id;
-     int *sityes;
-     int count;
+    int* sityes;
+    int count;
 };
 
 void globalFree(Graph* g, State* s, int k, int* sityesOwners)
@@ -26,7 +26,7 @@ void globalFree(Graph* g, State* s, int k, int* sityesOwners)
     } else {
         printf("Sityes owners isn't found!\n");
     }
-    
+
     graphFree(g);
 }
 
@@ -84,14 +84,14 @@ int main(void)
             globalFree(g, states, i, sityesOwners);
             return 1;
         }
-        
+
         states[i].sityes[states[i].count++] = capital;
         sityesOwners[capital] = i + 1;
     }
 
     annexation(g, states, k, sityesOwners);
 
-    for (int i =0; i < k; i++) {
+    for (int i = 0; i < k; i++) {
         printf("State #%d: ", states[i].id);
         for (int j = 0; j < states[i].count; j++) {
             printf("%d ", states[i].sityes[j]);
