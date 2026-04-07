@@ -107,7 +107,7 @@ void zeroTest(void)
 
     State* states = malloc(k * sizeof(State));
     int* sityesOwners = calloc(n + 1, sizeof(int));
-        if (states == NULL || sityesOwners == NULL) {
+    if (states == NULL || sityesOwners == NULL) {
         printf("Allocation error!\n");
         return 1;
     }
