@@ -12,7 +12,6 @@ struct State {
 void simpleTest(void)
 {
     printf("First test is running\n");
-    
     int n = 3;
     int m = 3;
     int k = 2;
@@ -28,7 +27,7 @@ void simpleTest(void)
     State* states = malloc(k * sizeof(State));
     int* sityesOwners = calloc(n + 1, sizeof(int));
 
-    int capitals[] = {1, 3};
+    int capitals[] = { 1, 3 };
     for (int i = 0; i < k; i++) {
         states[i].id = i + 1;
         states[i].count = 0;
