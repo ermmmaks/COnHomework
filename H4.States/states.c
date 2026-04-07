@@ -72,7 +72,7 @@ void graphFree(Graph* g)
     free(g);
 }
 
-int findNearest(Graph* g, State* s, int* sityesOwners)
+int findNearest(Graph* g, State* s, const int* sityesOwners)
 {
     int bestCity = -1;
     int minLen = 0;
