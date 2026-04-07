@@ -26,12 +26,21 @@ void simpleTest(void)
 
     State* states = malloc(k * sizeof(State));
     int* sityesOwners = calloc(n + 1, sizeof(int));
+    if (states == NULL || sityesOwners == NULL) {
+        printf("Allocation error!\n");
+        return 1;
+    }
 
     int capitals[] = { 1, 3 };
     for (int i = 0; i < k; i++) {
         states[i].id = i + 1;
         states[i].count = 0;
         states[i].sityes = malloc(n * sizeof(int));
+        if (states[i].sityes == NULL) {
+            printf("Allocation error!\n");
+            return 1;
+        }
+
         states[i].sityes[states[i].count++] = capitals[i];
         sityesOwners[capitals[i]] = i + 1;
     }
@@ -61,6 +70,10 @@ void isolatedTest(void)
 
     State* states = malloc(k * sizeof(State));
     int* sityesOwners = calloc(n + 1, sizeof(int));
+    if (states == NULL || sityesOwners == NULL) {
+        printf("Allocation error!\n");
+        return 1;
+    }
 
     states[0].id = 1;
     states[0].count = 0;
@@ -94,6 +107,10 @@ void zeroTest(void)
 
     State* states = malloc(k * sizeof(State));
     int* sityesOwners = calloc(n + 1, sizeof(int));
+        if (states == NULL || sityesOwners == NULL) {
+        printf("Allocation error!\n");
+        return 1;
+    }
 
     states[0].id = 1;
     states[0].count = 0;
