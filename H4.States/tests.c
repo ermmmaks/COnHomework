@@ -28,6 +28,7 @@ void simpleTest(void)
     int* sityesOwners = calloc(n + 1, sizeof(int));
     if (states == NULL || sityesOwners == NULL) {
         printf("Allocation error!\n");
+        globalFree(g, states, k, sityesOwners);
         return;
     }
 
@@ -38,6 +39,7 @@ void simpleTest(void)
         states[i].sityes = malloc(n * sizeof(int));
         if (states[i].sityes == NULL) {
             printf("Allocation error!\n");
+            globalFree(g, states, k, sityesOwners);
             return;
         }
 
@@ -72,6 +74,7 @@ void isolatedTest(void)
     int* sityesOwners = calloc(n + 1, sizeof(int));
     if (states == NULL || sityesOwners == NULL) {
         printf("Allocation error!\n");
+        globalFree(g, states, k, sityesOwners);
         return;
     }
 
@@ -109,6 +112,7 @@ void zeroTest(void)
     int* sityesOwners = calloc(n + 1, sizeof(int));
     if (states == NULL || sityesOwners == NULL) {
         printf("Allocation error!\n");
+        globalFree(g, states, k, sityesOwners);
         return;
     }
 
