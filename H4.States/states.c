@@ -73,7 +73,7 @@ void graphFree(Graph* g)
     free(g);
 }
 
-void globalFree(Graph* g, State* s, int k, int* sityesOwners)
+void cleaning(Graph* g, State* s, int k, int* sityesOwners)
 {
     if (s) {
         for (int i = 0; i < k; i++) {

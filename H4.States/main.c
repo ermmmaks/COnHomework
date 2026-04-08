@@ -37,7 +37,7 @@ int main(void)
 
     int k;
     if (scanf("%d", &k) != 1) {
-        globalFree(g, NULL, 0, NULL);
+        cleaning(g, NULL, 0, NULL);
         return 1;
     }
 
@@ -46,7 +46,7 @@ int main(void)
 
     if (states == NULL || sityesOwners == NULL) {
         printf("Allocate error!\n");
-        globalFree(g, states, 0, sityesOwners);
+        cleaning(g, states, 0, sityesOwners);
         return 1;
     }
 
@@ -62,7 +62,7 @@ int main(void)
         states[i].sityes = malloc(n * sizeof(int));
 
         if (states[i].sityes == NULL) {
-            globalFree(g, states, i, sityesOwners);
+            cleaning(g, states, i, sityesOwners);
             return 1;
         }
 
@@ -80,7 +80,7 @@ int main(void)
         printf("\n");
     }
 
-    globalFree(g, states, k, sityesOwners);
+    cleaning(g, states, k, sityesOwners);
 
     return 0;
 }
