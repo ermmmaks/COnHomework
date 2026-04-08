@@ -4,7 +4,7 @@
 
 struct State {
     int id;
-    int* sityes;
+    int* sities;
     int count;
 };
 
@@ -12,7 +12,7 @@ int main(void)
 {
     int n;
     int m;
-    printf("Write the count of sityes and ways: ");
+    printf("Write the count of sities and ways: ");
     if (scanf("%d %d", &n, &m) != 2) {
         return 0;
     }
@@ -42,11 +42,11 @@ int main(void)
     }
 
     State* states = malloc(k * sizeof(State));
-    int* sityesOwners = calloc(n + 1, sizeof(int));
+    int* sitiesOwners = calloc(n + 1, sizeof(int));
 
-    if (states == NULL || sityesOwners == NULL) {
+    if (states == NULL || sitiesOwners == NULL) {
         printf("Allocate error!\n");
-        cleaning(g, states, 0, sityesOwners);
+        cleaning(g, states, 0, sitiesOwners);
         return 1;
     }
 
@@ -59,28 +59,28 @@ int main(void)
 
         states[i].id = i + 1;
         states[i].count = 0;
-        states[i].sityes = malloc(n * sizeof(int));
+        states[i].sities = malloc(n * sizeof(int));
 
-        if (states[i].sityes == NULL) {
-            cleaning(g, states, i, sityesOwners);
+        if (states[i].sities == NULL) {
+            cleaning(g, states, i, sitiesOwners);
             return 1;
         }
 
-        states[i].sityes[states[i].count++] = capital;
-        sityesOwners[capital] = i + 1;
+        states[i].sities[states[i].count++] = capital;
+        sitiesOwners[capital] = i + 1;
     }
 
-    annex(g, states, k, sityesOwners);
+    annex(g, states, k, sitiesOwners);
 
     for (int i = 0; i < k; i++) {
         printf("State #%d: ", states[i].id);
         for (int j = 0; j < states[i].count; j++) {
-            printf("%d ", states[i].sityes[j]);
+            printf("%d ", states[i].sities[j]);
         }
         printf("\n");
     }
 
-    cleaning(g, states, k, sityesOwners);
+    cleaning(g, states, k, sitiesOwners);
 
     return 0;
 }

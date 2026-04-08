@@ -19,7 +19,7 @@ struct Graph {
 
 struct State {
     int id;
-    int* sityes;
+    int* sities;
     int count;
 };
 
@@ -73,12 +73,12 @@ void graphFree(Graph* g)
     free(g);
 }
 
-void cleaning(Graph* g, State* s, int k, int* sityesOwners)
+void cleaning(Graph* g, State* s, int k, int* sitiesOwners)
 {
     if (s) {
         for (int i = 0; i < k; i++) {
-            if (s[i].sityes) {
-                free(s[i].sityes);
+            if (s[i].sities) {
+                free(s[i].sities);
             }
         }
         free(s);
@@ -86,29 +86,29 @@ void cleaning(Graph* g, State* s, int k, int* sityesOwners)
         printf("States isn't found!\n");
     }
 
-    if (sityesOwners) {
-        free(sityesOwners);
+    if (sitiesOwners) {
+        free(sitiesOwners);
     } else {
-        printf("Sityes owners isn't found!\n");
+        printf("Sities owners isn't found!\n");
     }
 
     graphFree(g);
 }
 
-int findNearest(Graph* g, State* s, const int* sityesOwners)
+int findNearest(Graph* g, State* s, const int* sitiesOwners)
 {
     int bestCity = -1;
     int minLen = INT_MAX;
 
     for (int i = 0; i < s->count; i++) {
-        int u = s->sityes[i];
+        int u = s->sities[i];
         int e = g->head[u];
 
         while (e != -1) {
             int v = g->edges[e].way;
             int currLen = g->edges[e].len;
 
-            if (sityesOwners[v] == 0) {
+            if (sitiesOwners[v] == 0) {
                 if (bestCity == -1 || currLen < minLen) {
                     minLen = currLen;
                     bestCity = v;
@@ -120,7 +120,7 @@ int findNearest(Graph* g, State* s, const int* sityesOwners)
     return bestCity;
 }
 
-void annex(Graph* g, State* s, int k, int* sityesOwners)
+void annex(Graph* g, State* s, int k, int* sitiesOwners)
 {
     int total = k;
     while (total < g->n) {
@@ -129,10 +129,10 @@ void annex(Graph* g, State* s, int k, int* sityesOwners)
             if (total >= g->n) {
                 break;
             }
-            int nextVer = findNearest(g, &s[i], sityesOwners);
+            int nextVer = findNearest(g, &s[i], sitiesOwners);
             if (nextVer != -1) {
-                sityesOwners[nextVer] = s[i].id;
-                s[i].sityes[s[i].count++] = nextVer;
+                sitiesOwners[nextVer] = s[i].id;
+                s[i].sities[s[i].count++] = nextVer;
                 total++;
                 addedAny = true;
             }

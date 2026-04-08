@@ -5,7 +5,7 @@
 
 struct State {
     int id;
-    int* sityes;
+    int* sities;
     int count;
 };
 
@@ -25,10 +25,10 @@ void simpleTest(void)
     graphAdd(g, 2, 3, 5, 5);
 
     State* states = malloc(k * sizeof(State));
-    int* sityesOwners = calloc(n + 1, sizeof(int));
-    if (states == NULL || sityesOwners == NULL) {
+    int* sitiesOwners = calloc(n + 1, sizeof(int));
+    if (states == NULL || sitiesOwners == NULL) {
         printf("Allocation error!\n");
-        cleaning(g, states, k, sityesOwners);
+        cleaning(g, states, k, sitiesOwners);
         return;
     }
 
@@ -36,26 +36,26 @@ void simpleTest(void)
     for (int i = 0; i < k; i++) {
         states[i].id = i + 1;
         states[i].count = 0;
-        states[i].sityes = malloc(n * sizeof(int));
-        if (states[i].sityes == NULL) {
+        states[i].sities = malloc(n * sizeof(int));
+        if (states[i].sities == NULL) {
             printf("Allocation error!\n");
-            cleaning(g, states, k, sityesOwners);
+            cleaning(g, states, k, sitiesOwners);
             return;
         }
 
-        states[i].sityes[states[i].count++] = capitals[i];
-        sityesOwners[capitals[i]] = i + 1;
+        states[i].sities[states[i].count++] = capitals[i];
+        sitiesOwners[capitals[i]] = i + 1;
     }
 
-    annex(g, states, k, sityesOwners);
+    annex(g, states, k, sitiesOwners);
 
-    assert(sityesOwners[1] == 1);
-    assert(sityesOwners[3] == 2);
-    assert(sityesOwners[3] == 2);
+    assert(sitiesOwners[1] == 1);
+    assert(sitiesOwners[3] == 2);
+    assert(sitiesOwners[3] == 2);
 
     printf("Simple test passed!\n");
 
-    cleaning(g, states, k, sityesOwners);
+    cleaning(g, states, k, sitiesOwners);
 }
 
 void isolatedTest(void)
@@ -71,27 +71,27 @@ void isolatedTest(void)
     graphAdd(g, 2, 1, 10, 1);
 
     State* states = malloc(k * sizeof(State));
-    int* sityesOwners = calloc(n + 1, sizeof(int));
-    if (states == NULL || sityesOwners == NULL) {
+    int* sitiesOwners = calloc(n + 1, sizeof(int));
+    if (states == NULL || sitiesOwners == NULL) {
         printf("Allocation error!\n");
-        cleaning(g, states, k, sityesOwners);
+        cleaning(g, states, k, sitiesOwners);
         return;
     }
 
     states[0].id = 1;
     states[0].count = 0;
-    states[0].sityes = malloc(n * sizeof(int));
-    states[0].sityes[states[0].count++] = 1;
-    sityesOwners[1] = 1;
+    states[0].sities = malloc(n * sizeof(int));
+    states[0].sities[states[0].count++] = 1;
+    sitiesOwners[1] = 1;
 
-    annex(g, states, k, sityesOwners);
+    annex(g, states, k, sitiesOwners);
 
     assert(states[0].count == 2);
-    assert(sityesOwners[3] == 0);
+    assert(sitiesOwners[3] == 0);
 
     printf("Test with isolated sity passed!\n");
 
-    cleaning(g, states, k, sityesOwners);
+    cleaning(g, states, k, sitiesOwners);
 }
 
 void zeroTest(void)
@@ -109,28 +109,28 @@ void zeroTest(void)
     graphAdd(g, 3, 1, 0, 3);
 
     State* states = malloc(k * sizeof(State));
-    int* sityesOwners = calloc(n + 1, sizeof(int));
-    if (states == NULL || sityesOwners == NULL) {
+    int* sitiesOwners = calloc(n + 1, sizeof(int));
+    if (states == NULL || sitiesOwners == NULL) {
         printf("Allocation error!\n");
-        cleaning(g, states, k, sityesOwners);
+        cleaning(g, states, k, sitiesOwners);
         return;
     }
 
     states[0].id = 1;
     states[0].count = 0;
-    states[0].sityes = malloc(n * sizeof(int));
-    states[0].sityes[states[0].count++] = 1;
-    sityesOwners[1] = 1;
+    states[0].sities = malloc(n * sizeof(int));
+    states[0].sities[states[0].count++] = 1;
+    sitiesOwners[1] = 1;
 
-    annex(g, states, k, sityesOwners);
+    annex(g, states, k, sitiesOwners);
 
-    assert(sityesOwners[2] == 1);
-    assert(sityesOwners[3] == 1);
+    assert(sitiesOwners[2] == 1);
+    assert(sitiesOwners[3] == 1);
     assert(states[0].count == 3);
 
     printf("Test with zero ways passed!\n");
 
-    cleaning(g, states, k, sityesOwners);
+    cleaning(g, states, k, sitiesOwners);
 }
 
 int main(void)
