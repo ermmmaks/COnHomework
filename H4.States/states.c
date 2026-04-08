@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 struct Edge {
     int way;
@@ -97,7 +98,7 @@ void globalFree(Graph* g, State* s, int k, int* sityesOwners)
 int findNearest(Graph* g, State* s, const int* sityesOwners)
 {
     int bestCity = -1;
-    int minLen = 0;
+    int minLen = INT_MAX;
 
     for (int i = 0; i < s->count; i++) {
         int u = s->sityes[i];
