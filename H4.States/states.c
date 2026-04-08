@@ -25,6 +25,18 @@ struct State {
     int count;
 };
 
+void graphFree(Graph* g)
+{
+    if (g == NULL) {
+        printf("Graph doesn't exist!\n");
+        return;
+    }
+    free(g->head);
+    free(g->next);
+    free(g->edges);
+    free(g);
+}
+
 Graph* graphCreate(int n, int m)
 {
     Graph* g = malloc(sizeof(Graph));
@@ -61,18 +73,6 @@ void graphAdd(Graph* g, int u, int v, int len, int idx)
     g->edges[idx].len = len;
     g->next[idx] = g->head[u];
     g->head[u] = idx;
-}
-
-void graphFree(Graph* g)
-{
-    if (g == NULL) {
-        printf("Graph doesn't exist!\n");
-        return;
-    }
-    free(g->head);
-    free(g->next);
-    free(g->edges);
-    free(g);
 }
 
 void cleaning(Graph* g, State* s, int k, int* sitiesOwners)
