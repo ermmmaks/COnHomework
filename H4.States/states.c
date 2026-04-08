@@ -25,8 +25,6 @@ struct State {
     int count;
 };
 
-// create new graph. return NULL on memory allocation failure
-
 Graph* graphCreate(int n, int m)
 {
     Graph* g = malloc(sizeof(Graph));
@@ -53,8 +51,6 @@ Graph* graphCreate(int n, int m)
     return g;
 }
 
-// add edge to list of neighbours
-
 void graphAdd(Graph* g, int u, int v, int len, int idx)
 {
     if (g == NULL || idx >= (2 * g->m)) {
@@ -67,8 +63,6 @@ void graphAdd(Graph* g, int u, int v, int len, int idx)
     g->head[u] = idx;
 }
 
-// graph free-f
-
 void graphFree(Graph* g)
 {
     if (g == NULL) {
@@ -80,8 +74,6 @@ void graphFree(Graph* g)
     free(g->edges);
     free(g);
 }
-
-// total free-f for all allocated memory
 
 void cleaning(Graph* g, State* s, int k, int* sitiesOwners)
 {
@@ -105,8 +97,7 @@ void cleaning(Graph* g, State* s, int k, int* sitiesOwners)
     graphFree(g);
 }
 
-/* find nearest free sity for accepted state
-iteration on neighbours */
+// iteration on neighbours
 
 int findNearest(Graph* g, State* s, const int* sitiesOwners)
 {
@@ -133,8 +124,7 @@ int findNearest(Graph* g, State* s, const int* sitiesOwners)
     return bestCity;
 }
 
-/* f for annexation the sities
-ordered the sities
+/* ordered the sities
 for every states one by one search a nearest free city
 addedAny -- flag to stop on disconnected graph */
 
