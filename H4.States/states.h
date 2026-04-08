@@ -4,8 +4,6 @@
 
 typedef struct Edge Edge;
 
-// n -- count of sities, m -- count of roads
-
 typedef struct Graph Graph;
 
 typedef struct State State;
@@ -17,10 +15,6 @@ Graph* graphCreate(int n, int m);
 // add edge to list of neighbours
 
 void graphAdd(Graph* g, int u, int v, int len, int idx);
-
-// graph free-f
-
-void graphFree(Graph* g);
 
 // total free-f for all allocated memory
 
