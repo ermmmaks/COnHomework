@@ -47,7 +47,7 @@ void simpleTest(void)
         sityesOwners[capitals[i]] = i + 1;
     }
 
-    annexation(g, states, k, sityesOwners);
+    annex(g, states, k, sityesOwners);
 
     assert(sityesOwners[1] == 1);
     assert(sityesOwners[3] == 2);
@@ -84,7 +84,7 @@ void isolatedTest(void)
     states[0].sityes[states[0].count++] = 1;
     sityesOwners[1] = 1;
 
-    annexation(g, states, k, sityesOwners);
+    annex(g, states, k, sityesOwners);
 
     assert(states[0].count == 2);
     assert(sityesOwners[3] == 0);
@@ -122,7 +122,7 @@ void zeroTest(void)
     states[0].sityes[states[0].count++] = 1;
     sityesOwners[1] = 1;
 
-    annexation(g, states, k, sityesOwners);
+    annex(g, states, k, sityesOwners);
 
     assert(sityesOwners[2] == 1);
     assert(sityesOwners[3] == 1);

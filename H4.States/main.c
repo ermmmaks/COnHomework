@@ -70,7 +70,7 @@ int main(void)
         sityesOwners[capital] = i + 1;
     }
 
-    annexation(g, states, k, sityesOwners);
+    annex(g, states, k, sityesOwners);
 
     for (int i = 0; i < k; i++) {
         printf("State #%d: ", states[i].id);

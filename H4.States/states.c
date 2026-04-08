@@ -120,7 +120,7 @@ int findNearest(Graph* g, State* s, const int* sityesOwners)
     return bestCity;
 }
 
-void annexation(Graph* g, State* s, int k, int* sityesOwners)
+void annex(Graph* g, State* s, int k, int* sityesOwners)
 {
     int total = k;
     while (total < g->n) {
