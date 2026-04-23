@@ -28,7 +28,7 @@ int main(void)
         int city1;
         int city2;
         int len;
-        if (scanf("%d %d %d",  city1, &city2, &len) != 3) {
+        if (scanf("%d %d %d", &city1, &city2, &len) != 3) {
             break;
         }
         graphAdd(g, city1, city2, len, 2 * i);

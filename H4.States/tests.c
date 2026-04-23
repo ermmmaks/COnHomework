@@ -128,7 +128,7 @@ void zeroTest(void)
     assert(citiesOwners[3] == 1);
     assert(states[0].count == 3);
 
-    printf("Test with zero ways passed!\n");
+    printf("Test with zero roads passed!\n");
 
     freeAnnexTask(g, states, capitalsCount, citiesOwners);
 }
