@@ -73,10 +73,10 @@ void graphAdd(Graph* g, int u, int v, int len, int idx)
     g->head[u] = idx;
 }
 
-void freeAnnexTask(Graph* g, State* s, int k, int* citiesOwners)
+void freeAnnexTask(Graph* g, State* s, int capitalsCount, int* citiesOwners)
 {
     if (s) {
-        for (int i = 0; i < k; i++) {
+        for (int i = 0; i < capitalsCount; i++) {
             if (s[i].cities) {
                 free(s[i].cities);
             }
@@ -126,12 +126,12 @@ int findNearest(Graph* g, State* s, const int* citiesOwners)
 for every states one by one search a nearest free city
 addedAny -- flag to stop on disconnected graph */
 
-void annex(Graph* g, State* s, int k, int* citiesOwners)
+void annex(Graph* g, State* s, int capitalsCount, int* citiesOwners)
 {
-    int total = k;
+    int total = capitalsCount;
     while (total < g->citiesCount) {
         bool addedAny = false;
-        for (int i = 0; i < k; i++) {
+        for (int i = 0; i < capitalsCount; i++) {
             if (total >= g->citiesCount) {
                 break;
             }
