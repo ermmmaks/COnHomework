@@ -4,49 +4,49 @@
 
 struct State {
     int id;
-    int* sities;
+    int* cities;
     int count;
 };
 
 int main(void)
 {
-    int n;
-    int m;
-    printf("Write the count of sities and ways: ");
-    if (scanf("%d %d", &n, &m) != 2) {
+    int citiesCount;
+    int roadsCount;
+    printf("Write the count of cities and roads: ");
+    if (scanf("%d %d", &citiesCount, &roadsCount) != 2) {
         return 0;
     }
 
-    Graph* g = graphCreate(n, m);
+    Graph* g = graphCreate(citiesCount, roadsCount);
     if (g == NULL) {
         printf("Graph doesn't exist!\n");
         return 1;
     }
 
-    printf("Write the data in this order: sity1, sity2, lenWay\n");
-    for (int i = 0; i < m; i++) {
-        int u;
-        int v;
+    printf("Write the data in this order: city1, city2, lenRoad\n");
+    for (int i = 0; i < roadsCount; i++) {
+        int city1;
+        int city2;
         int len;
-        if (scanf("%d %d %d", &u, &v, &len) != 3) {
+        if (scanf("%d %d %d",  city1, &city2, &len) != 3) {
             break;
         }
-        graphAdd(g, u, v, len, 2 * i);
-        graphAdd(g, v, u, len, 2 * i + 1);
+        graphAdd(g, city1, city2, len, 2 * i);
+        graphAdd(g, city2, city1, len, 2 * i + 1);
     }
 
     int k;
     if (scanf("%d", &k) != 1) {
-        cleaning(g, NULL, 0, NULL);
+        freeAnnexTask(g, NULL, 0, NULL);
         return 1;
     }
 
     State* states = malloc(k * sizeof(State));
-    int* sitiesOwners = calloc(n + 1, sizeof(int));
+    int* citiesOwners = calloc(citiesCount + 1, sizeof(int));
 
-    if (states == NULL || sitiesOwners == NULL) {
+    if (states == NULL || citiesOwners == NULL) {
         printf("Allocate error!\n");
-        cleaning(g, states, 0, sitiesOwners);
+        freeAnnexTask(g, states, 0, citiesOwners);
         return 1;
     }
 
@@ -59,28 +59,28 @@ int main(void)
 
         states[i].id = i + 1;
         states[i].count = 0;
-        states[i].sities = malloc(n * sizeof(int));
+        states[i].cities = malloc(citiesCount * sizeof(int));
 
-        if (states[i].sities == NULL) {
-            cleaning(g, states, i, sitiesOwners);
+        if (states[i].cities == NULL) {
+            freeAnnexTask(g, states, i, citiesOwners);
             return 1;
         }
 
-        states[i].sities[states[i].count++] = capital;
-        sitiesOwners[capital] = i + 1;
+        states[i].cities[states[i].count++] = capital;
+        citiesOwners[capital] = i + 1;
     }
 
-    annex(g, states, k, sitiesOwners);
+    annex(g, states, k, citiesOwners);
 
     for (int i = 0; i < k; i++) {
         printf("State #%d: ", states[i].id);
         for (int j = 0; j < states[i].count; j++) {
-            printf("%d ", states[i].sities[j]);
+            printf("%d ", states[i].cities[j]);
         }
         printf("\n");
     }
 
-    cleaning(g, states, k, sitiesOwners);
+    freeAnnexTask(g, states, k, citiesOwners);
 
     return 0;
 }

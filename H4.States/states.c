@@ -9,11 +9,9 @@ struct Edge {
     int len;
 };
 
-// n -- count of sities, m -- count of roads
-
 struct Graph {
-    int n;
-    int m;
+    int citiesCount;
+    int roadsCount;
     int* head;
     int* next;
     Edge* edges;
@@ -21,7 +19,7 @@ struct Graph {
 
 struct State {
     int id;
-    int* sities;
+    int* cities;
     int count;
 };
 
@@ -37,7 +35,7 @@ void graphFree(Graph* g)
     free(g);
 }
 
-Graph* graphCreate(int n, int m)
+Graph* graphCreate(int citiesCount, int roadsCount)
 {
     Graph* g = malloc(sizeof(Graph));
     if (g == NULL) {
@@ -45,11 +43,11 @@ Graph* graphCreate(int n, int m)
         return NULL;
     }
 
-    g->n = n;
-    g->m = m;
-    g->head = malloc((n + 1) * sizeof(int));
-    g->next = malloc(2 * m * sizeof(int));
-    g->edges = malloc(2 * m * sizeof(struct Edge));
+    g->citiesCount = citiesCount;
+    g->roadsCount = roadsCount;
+    g->head = malloc((citiesCount + 1) * sizeof(int));
+    g->next = malloc(2 * roadsCount * sizeof(int));
+    g->edges = malloc(2 * roadsCount * sizeof(struct Edge));
 
     if (g->head == NULL || g->next == NULL || g->edges == NULL) {
         graphFree(g);
@@ -57,7 +55,7 @@ Graph* graphCreate(int n, int m)
         return NULL;
     }
 
-    for (int i = 1; i <= n; i++) {
+    for (int i = 1; i <= citiesCount; i++) {
         g->head[i] = -1;
     }
     return g;
@@ -65,7 +63,7 @@ Graph* graphCreate(int n, int m)
 
 void graphAdd(Graph* g, int u, int v, int len, int idx)
 {
-    if (g == NULL || idx >= (2 * g->m)) {
+    if (g == NULL || idx >= (2 * g->roadsCount)) {
         printf("Invalid graph or index!\n");
         return;
     }
@@ -75,12 +73,12 @@ void graphAdd(Graph* g, int u, int v, int len, int idx)
     g->head[u] = idx;
 }
 
-void cleaning(Graph* g, State* s, int k, int* sitiesOwners)
+void freeAnnexTask(Graph* g, State* s, int k, int* citiesOwners)
 {
     if (s) {
         for (int i = 0; i < k; i++) {
-            if (s[i].sities) {
-                free(s[i].sities);
+            if (s[i].cities) {
+                free(s[i].cities);
             }
         }
         free(s);
@@ -88,10 +86,10 @@ void cleaning(Graph* g, State* s, int k, int* sitiesOwners)
         printf("States isn't found!\n");
     }
 
-    if (sitiesOwners) {
-        free(sitiesOwners);
+    if (citiesOwners) {
+        free(citiesOwners);
     } else {
-        printf("Sities owners isn't found!\n");
+        printf("Cities owners isn't found!\n");
     }
 
     graphFree(g);
@@ -99,20 +97,20 @@ void cleaning(Graph* g, State* s, int k, int* sitiesOwners)
 
 // iteration on neighbours
 
-int findNearest(Graph* g, State* s, const int* sitiesOwners)
+int findNearest(Graph* g, State* s, const int* citiesOwners)
 {
     int bestCity = -1;
     int minLen = INT_MAX;
 
     for (int i = 0; i < s->count; i++) {
-        int u = s->sities[i];
+        int u = s->cities[i];
         int e = g->head[u];
 
         while (e != -1) {
             int v = g->edges[e].way;
             int currLen = g->edges[e].len;
 
-            if (sitiesOwners[v] == 0) {
+            if (citiesOwners[v] == 0) {
                 if (bestCity == -1 || currLen < minLen) {
                     minLen = currLen;
                     bestCity = v;
@@ -124,23 +122,23 @@ int findNearest(Graph* g, State* s, const int* sitiesOwners)
     return bestCity;
 }
 
-/* ordered the sities
+/* ordered the cities
 for every states one by one search a nearest free city
 addedAny -- flag to stop on disconnected graph */
 
-void annex(Graph* g, State* s, int k, int* sitiesOwners)
+void annex(Graph* g, State* s, int k, int* citiesOwners)
 {
     int total = k;
-    while (total < g->n) {
+    while (total < g->citiesCount) {
         bool addedAny = false;
         for (int i = 0; i < k; i++) {
-            if (total >= g->n) {
+            if (total >= g->citiesCount) {
                 break;
             }
-            int nextVer = findNearest(g, &s[i], sitiesOwners);
+            int nextVer = findNearest(g, &s[i], citiesOwners);
             if (nextVer != -1) {
-                sitiesOwners[nextVer] = s[i].id;
-                s[i].sities[s[i].count++] = nextVer;
+                citiesOwners[nextVer] = s[i].id;
+                s[i].cities[s[i].count++] = nextVer;
                 total++;
                 addedAny = true;
             }
