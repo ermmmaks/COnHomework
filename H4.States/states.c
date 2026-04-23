@@ -37,12 +37,35 @@ void graphFree(Graph* graph)
 
 State* statesCreate(int count)
 {
-    State* s = malloc(count * sizeof(State));
-    if (s == NULL) {
+    State* states = malloc(count * sizeof(State));
+    if (states == NULL) {
         printf("Allocate error!\n");
         return NULL;
     }
-    return s;
+    return states;
+}
+
+void stateInit(State* state, int idx, int stateId, int capital, int maxCities)
+{
+    state[idx].id = stateId;
+    state[idx].count = 0;
+    state[idx].cities = malloc(maxCities * sizeof(int));
+    state[idx].cities[state[idx].count++] = capital;
+}
+
+int stateGetId(State* state, int idx)
+{
+    return state[idx].id;
+}
+
+int stateGetCount(State* state, int idx)
+{
+    return state[idx].count;
+}
+
+int stateGetCity(State* state, int stateIdx, int cityIdx)
+{
+    return state[stateIdx].cities[cityIdx];
 }
 
 Graph* graphCreate(int citiesCount, int roadsCount)

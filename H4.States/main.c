@@ -4,10 +4,16 @@
 
 int main(void)
 {
+    FILE* file = fopen("input.txt", "r");
+    if (file == NULL) {
+        printf("Error at the opening file!\n");
+        return 1;
+    }
+
     int citiesCount;
     int roadsCount;
-    printf("Write the count of cities and roads: ");
-    if (scanf("%d %d", &citiesCount, &roadsCount) != 2) {
+    if (fscanf(file, "%d %d", &citiesCount, &roadsCount) != 2) {
+        fclose(file);
         return 0;
     }
 
@@ -17,12 +23,11 @@ int main(void)
         return 1;
     }
 
-    printf("Write the data in this order: city1, city2, lenRoad\n");
     for (int i = 0; i < roadsCount; i++) {
         int city1;
         int city2;
         int len;
-        if (scanf("%d %d %d", &city1, &city2, &len) != 3) {
+        if (fscanf(file, "%d %d %d", &city1, &city2, &len) != 3) {
             break;
         }
         graphAdd(graph, city1, city2, len, 2 * i);
@@ -30,7 +35,7 @@ int main(void)
     }
 
     int capitalsCount;
-    if (scanf("%d", &capitalsCount) != 1) {
+    if (fscanf(file, "%d", &capitalsCount) != 1) {
         freeAnnexTask(graph, NULL, 0, NULL);
         return 1;
     }
@@ -46,30 +51,22 @@ int main(void)
 
     for (int i = 0; i < capitalsCount; i++) {
         int capital;
-        printf("Select the capitals: ");
-        if (scanf("%d", &capital) != 1) {
+        if (fscanf(file, "%d", &capital) != 1) {
             break;
         }
 
-        states[i].id = i + 1;
-        states[i].count = 0;
-        states[i].cities = malloc(citiesCount * sizeof(int));
-
-        if (states[i].cities == NULL) {
-            freeAnnexTask(graph, states, i, citiesOwners);
-            return 1;
-        }
-
-        states[i].cities[states[i].count++] = capital;
+        stateInit(states, i, i + 1, capital, citiesCount);
         citiesOwners[capital] = i + 1;
     }
+
+    fclose(file);
 
     annex(graph, states, capitalsCount, citiesOwners);
 
     for (int i = 0; i < capitalsCount; i++) {
-        printf("State #%d: ", states[i].id);
-        for (int j = 0; j < states[i].count; j++) {
-            printf("%d ", states[i].cities[j]);
+        printf("State #%d: ", stateGetId(states, i));
+        for (int j = 0; j < stateGetCount(states, i); j++) {
+            printf("%d ", stateGetCity(states, i, j));
         }
         printf("\n");
     }
