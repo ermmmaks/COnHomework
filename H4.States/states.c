@@ -23,57 +23,67 @@ struct State {
     int count;
 };
 
-void graphFree(Graph* g)
+void graphFree(Graph* graph)
 {
-    if (g == NULL) {
+    if (graph == NULL) {
         printf("Graph doesn't exist!\n");
         return;
     }
-    free(g->head);
-    free(g->next);
-    free(g->edges);
-    free(g);
+    free(graph->head);
+    free(graph->next);
+    free(graph->edges);
+    free(graph);
+}
+
+State* statesCreate(int count)
+{
+    State* s = malloc(count * sizeof(State));
+    if (s == NULL) {
+        printf("Allocate error!\n");
+        return NULL;
+    }
+    return s;
 }
 
 Graph* graphCreate(int citiesCount, int roadsCount)
 {
-    Graph* g = malloc(sizeof(Graph));
-    if (g == NULL) {
+    Graph* graph = malloc(sizeof(Graph));
+    if (graph == NULL) {
         printf("Allocate error!\n");
         return NULL;
     }
 
-    g->citiesCount = citiesCount;
-    g->roadsCount = roadsCount;
-    g->head = malloc((citiesCount + 1) * sizeof(int));
-    g->next = malloc(2 * roadsCount * sizeof(int));
-    g->edges = malloc(2 * roadsCount * sizeof(struct Edge));
+    graph->citiesCount = citiesCount;
+    graph->roadsCount = roadsCount;
+    graph->head = malloc((citiesCount + 1) * sizeof(int));
+    graph->next = malloc(2 * roadsCount * sizeof(int));
+    graph->edges = malloc(2 * roadsCount * sizeof(struct Edge));
 
-    if (g->head == NULL || g->next == NULL || g->edges == NULL) {
-        graphFree(g);
+    if (graph->head == NULL || graph->next == NULL || graph->edges == NULL) {
+        graphFree(graph);
         printf("Allocate error!\n");
         return NULL;
     }
 
     for (int i = 1; i <= citiesCount; i++) {
-        g->head[i] = -1;
+        graph->head[i] = -1;
     }
-    return g;
+    return graph;
 }
 
-void graphAdd(Graph* g, int u, int v, int len, int idx)
+void graphAdd(Graph* graph, int u, int v, int len, int idx)
 {
-    if (g == NULL || idx >= (2 * g->roadsCount)) {
+    if (graph == NULL || idx >= (2 * graph->roadsCount)) {
         printf("Invalid graph or index!\n");
         return;
     }
-    g->edges[idx].way = v;
-    g->edges[idx].len = len;
-    g->next[idx] = g->head[u];
-    g->head[u] = idx;
+    graph->edges[idx].way = v;
+    graph->edges[idx].len = len;
+    graph->next[idx] = graph->head[u];
+    graph->head[u] = idx;
 }
 
-void freeAnnexTask(Graph* g, State* s, int capitalsCount, int* citiesOwners)
+void freeAnnexTask(Graph* graph, State* s, int capitalsCount, int* citiesOwners)
 {
     if (s) {
         for (int i = 0; i < capitalsCount; i++) {
@@ -92,22 +102,22 @@ void freeAnnexTask(Graph* g, State* s, int capitalsCount, int* citiesOwners)
         printf("Cities owners isn't found!\n");
     }
 
-    graphFree(g);
+    graphFree(graph);
 }
 
 // iteration on neighbours
-int findNearest(Graph* g, State* s, const int* citiesOwners)
+int findNearest(Graph* graph, State* s, const int* citiesOwners)
 {
     int bestCity = -1;
     int minLen = INT_MAX;
 
     for (int i = 0; i < s->count; i++) {
         int u = s->cities[i];
-        int e = g->head[u];
+        int e = graph->head[u];
 
         while (e != -1) {
-            int v = g->edges[e].way;
-            int currLen = g->edges[e].len;
+            int v = graph->edges[e].way;
+            int currLen = graph->edges[e].len;
 
             if (citiesOwners[v] == 0) {
                 if (bestCity == -1 || currLen < minLen) {
@@ -115,7 +125,7 @@ int findNearest(Graph* g, State* s, const int* citiesOwners)
                     bestCity = v;
                 }
             }
-            e = g->next[e];
+            e = graph->next[e];
         }
     }
     return bestCity;
@@ -124,16 +134,16 @@ int findNearest(Graph* g, State* s, const int* citiesOwners)
 /* ordered the cities
 for every states one by one search a nearest free city
 addedAny -- flag to stop on disconnected graph */
-void annex(Graph* g, State* s, int capitalsCount, int* citiesOwners)
+void annex(Graph* graph, State* s, int capitalsCount, int* citiesOwners)
 {
     int total = capitalsCount;
-    while (total < g->citiesCount) {
+    while (total < graph->citiesCount) {
         bool addedAny = false;
         for (int i = 0; i < capitalsCount; i++) {
-            if (total >= g->citiesCount) {
+            if (total >= graph->citiesCount) {
                 break;
             }
-            int nextVer = findNearest(g, &s[i], citiesOwners);
+            int nextVer = findNearest(graph, &s[i], citiesOwners);
             if (nextVer != -1) {
                 citiesOwners[nextVer] = s[i].id;
                 s[i].cities[s[i].count++] = nextVer;

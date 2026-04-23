@@ -2,12 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct State {
-    int id;
-    int* cities;
-    int count;
-};
-
 int main(void)
 {
     int citiesCount;
@@ -17,8 +11,8 @@ int main(void)
         return 0;
     }
 
-    Graph* g = graphCreate(citiesCount, roadsCount);
-    if (g == NULL) {
+    Graph* graph = graphCreate(citiesCount, roadsCount);
+    if (graph == NULL) {
         printf("Graph doesn't exist!\n");
         return 1;
     }
@@ -31,26 +25,26 @@ int main(void)
         if (scanf("%d %d %d", &city1, &city2, &len) != 3) {
             break;
         }
-        graphAdd(g, city1, city2, len, 2 * i);
-        graphAdd(g, city2, city1, len, 2 * i + 1);
+        graphAdd(graph, city1, city2, len, 2 * i);
+        graphAdd(graph, city2, city1, len, 2 * i + 1);
     }
 
-    int k;
-    if (scanf("%d", &k) != 1) {
-        freeAnnexTask(g, NULL, 0, NULL);
+    int capitalsCount;
+    if (scanf("%d", &capitalsCount) != 1) {
+        freeAnnexTask(graph, NULL, 0, NULL);
         return 1;
     }
 
-    State* states = malloc(k * sizeof(State));
+    State* states = statesCreate(capitalsCount);
     int* citiesOwners = calloc(citiesCount + 1, sizeof(int));
 
     if (states == NULL || citiesOwners == NULL) {
         printf("Allocate error!\n");
-        freeAnnexTask(g, states, 0, citiesOwners);
+        freeAnnexTask(graph, states, 0, citiesOwners);
         return 1;
     }
 
-    for (int i = 0; i < k; i++) {
+    for (int i = 0; i < capitalsCount; i++) {
         int capital;
         printf("Select the capitals: ");
         if (scanf("%d", &capital) != 1) {
@@ -62,7 +56,7 @@ int main(void)
         states[i].cities = malloc(citiesCount * sizeof(int));
 
         if (states[i].cities == NULL) {
-            freeAnnexTask(g, states, i, citiesOwners);
+            freeAnnexTask(graph, states, i, citiesOwners);
             return 1;
         }
 
@@ -70,9 +64,9 @@ int main(void)
         citiesOwners[capital] = i + 1;
     }
 
-    annex(g, states, k, citiesOwners);
+    annex(graph, states, capitalsCount, citiesOwners);
 
-    for (int i = 0; i < k; i++) {
+    for (int i = 0; i < capitalsCount; i++) {
         printf("State #%d: ", states[i].id);
         for (int j = 0; j < states[i].count; j++) {
             printf("%d ", states[i].cities[j]);
@@ -80,7 +74,7 @@ int main(void)
         printf("\n");
     }
 
-    freeAnnexTask(g, states, k, citiesOwners);
+    freeAnnexTask(graph, states, capitalsCount, citiesOwners);
 
     return 0;
 }

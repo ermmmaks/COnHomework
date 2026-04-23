@@ -16,19 +16,19 @@ void simpleTest(void)
     int roadsCount = 3;
     int capitalsCount = 2;
 
-    Graph* g = graphCreate(citiesCount, roadsCount);
-    graphAdd(g, 1, 2, 10, 0);
-    graphAdd(g, 2, 1, 10, 1);
-    graphAdd(g, 2, 3, 5, 2);
-    graphAdd(g, 3, 2, 5, 3);
-    graphAdd(g, 3, 2, 5, 4);
-    graphAdd(g, 2, 3, 5, 5);
+    Graph* graph = graphCreate(citiesCount, roadsCount);
+    graphAdd(graph, 1, 2, 10, 0);
+    graphAdd(graph, 2, 1, 10, 1);
+    graphAdd(graph, 2, 3, 5, 2);
+    graphAdd(graph, 3, 2, 5, 3);
+    graphAdd(graph, 3, 2, 5, 4);
+    graphAdd(graph, 2, 3, 5, 5);
 
-    State* states = malloc(capitalsCount * sizeof(State));
+    State* states = statesCreate(capitalsCount);
     int* citiesOwners = calloc(citiesCount + 1, sizeof(int));
     if (states == NULL || citiesOwners == NULL) {
         printf("Allocation error!\n");
-        freeAnnexTask(g, states, capitalsCount, citiesOwners);
+        freeAnnexTask(graph, states, capitalsCount, citiesOwners);
         return;
     }
 
@@ -39,7 +39,7 @@ void simpleTest(void)
         states[i].cities = malloc(citiesCount * sizeof(int));
         if (states[i].cities == NULL) {
             printf("Allocation error!\n");
-            freeAnnexTask(g, states, capitalsCount, citiesOwners);
+            freeAnnexTask(graph, states, capitalsCount, citiesOwners);
             return;
         }
 
@@ -47,7 +47,7 @@ void simpleTest(void)
         citiesOwners[capitals[i]] = i + 1;
     }
 
-    annex(g, states, capitalsCount, citiesOwners);
+    annex(graph, states, capitalsCount, citiesOwners);
 
     assert(citiesOwners[1] == 1);
     assert(citiesOwners[3] == 2);
@@ -55,7 +55,7 @@ void simpleTest(void)
 
     printf("Simple test passed!\n");
 
-    freeAnnexTask(g, states, capitalsCount, citiesOwners);
+    freeAnnexTask(graph, states, capitalsCount, citiesOwners);
 }
 
 void isolatedTest(void)
@@ -66,15 +66,15 @@ void isolatedTest(void)
     int roadsCount = 1;
     int capitalsCount = 1;
 
-    Graph* g = graphCreate(citiesCount, roadsCount);
-    graphAdd(g, 1, 2, 10, 0);
-    graphAdd(g, 2, 1, 10, 1);
+    Graph* graph = graphCreate(citiesCount, roadsCount);
+    graphAdd(graph, 1, 2, 10, 0);
+    graphAdd(graph, 2, 1, 10, 1);
 
-    State* states = malloc(capitalsCount * sizeof(State));
+    State* states = statesCreate(capitalsCount);
     int* citiesOwners = calloc(citiesCount + 1, sizeof(int));
     if (states == NULL || citiesOwners == NULL) {
         printf("Allocation error!\n");
-        freeAnnexTask(g, states, capitalsCount, citiesOwners);
+        freeAnnexTask(graph, states, capitalsCount, citiesOwners);
         return;
     }
 
@@ -84,14 +84,14 @@ void isolatedTest(void)
     states[0].cities[states[0].count++] = 1;
     citiesOwners[1] = 1;
 
-    annex(g, states, capitalsCount, citiesOwners);
+    annex(graph, states, capitalsCount, citiesOwners);
 
     assert(states[0].count == 2);
     assert(citiesOwners[3] == 0);
 
     printf("Test with isolated sity passed!\n");
 
-    freeAnnexTask(g, states, capitalsCount, citiesOwners);
+    freeAnnexTask(graph, states, capitalsCount, citiesOwners);
 }
 
 void zeroTest(void)
@@ -102,17 +102,17 @@ void zeroTest(void)
     int roadsCount = 2;
     int capitalsCount = 1;
 
-    Graph* g = graphCreate(citiesCount, roadsCount);
-    graphAdd(g, 1, 2, 0, 0);
-    graphAdd(g, 2, 1, 0, 1);
-    graphAdd(g, 1, 3, 0, 2);
-    graphAdd(g, 3, 1, 0, 3);
+    Graph* graph = graphCreate(citiesCount, roadsCount);
+    graphAdd(graph, 1, 2, 0, 0);
+    graphAdd(graph, 2, 1, 0, 1);
+    graphAdd(graph, 1, 3, 0, 2);
+    graphAdd(graph, 3, 1, 0, 3);
 
-    State* states = malloc(capitalsCount * sizeof(State));
+    State* states = statesCreate(capitalsCount);
     int* citiesOwners = calloc(citiesCount + 1, sizeof(int));
     if (states == NULL || citiesOwners == NULL) {
         printf("Allocation error!\n");
-        freeAnnexTask(g, states, capitalsCount, citiesOwners);
+        freeAnnexTask(graph, states, capitalsCount, citiesOwners);
         return;
     }
 
@@ -122,7 +122,7 @@ void zeroTest(void)
     states[0].cities[states[0].count++] = 1;
     citiesOwners[1] = 1;
 
-    annex(g, states, capitalsCount, citiesOwners);
+    annex(graph, states, capitalsCount, citiesOwners);
 
     assert(citiesOwners[2] == 1);
     assert(citiesOwners[3] == 1);
@@ -130,7 +130,7 @@ void zeroTest(void)
 
     printf("Test with zero roads passed!\n");
 
-    freeAnnexTask(g, states, capitalsCount, citiesOwners);
+    freeAnnexTask(graph, states, capitalsCount, citiesOwners);
 }
 
 int main(void)
