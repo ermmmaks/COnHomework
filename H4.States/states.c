@@ -96,7 +96,6 @@ void freeAnnexTask(Graph* g, State* s, int capitalsCount, int* citiesOwners)
 }
 
 // iteration on neighbours
-
 int findNearest(Graph* g, State* s, const int* citiesOwners)
 {
     int bestCity = -1;
@@ -125,7 +124,6 @@ int findNearest(Graph* g, State* s, const int* citiesOwners)
 /* ordered the cities
 for every states one by one search a nearest free city
 addedAny -- flag to stop on disconnected graph */
-
 void annex(Graph* g, State* s, int capitalsCount, int* citiesOwners)
 {
     int total = capitalsCount;
